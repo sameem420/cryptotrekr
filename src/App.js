@@ -3,11 +3,8 @@ import {
   Heading,
   Input,
   Skeleton,
-  SkeletonCircle,
-  SkeletonText,
+  Stack,
   Box,
-  Spinner,
-  Center,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -33,8 +30,13 @@ function App() {
     return (
       <Skeleton isLoaded={loading}>
         <Box padding="6" boxShadow="lg" bg="white">
-          <SkeletonCircle size="10" />
-          <SkeletonText mt="25" m="5" noOfLines={15} spacing="5" />
+          <Stack>
+            <Skeleton height="50px" />
+            <Skeleton height="50px" />
+            <Skeleton height="50px" />
+            <Skeleton height="50px" />
+            <Skeleton height="50px" />
+          </Stack>
         </Box>
       </Skeleton>
     );
@@ -49,6 +51,7 @@ function App() {
           variant="filled"
           placeholder="Enter coin name to filter..."
           m={5}
+          onChange={console.log("Hello World!")}
         />
       </Container>
 
