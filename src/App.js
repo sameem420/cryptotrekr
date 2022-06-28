@@ -6,12 +6,14 @@ import {
   Stack,
   Box,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import CoinList from "./components/CoinList";
 
 function App() {
+  const filterRef = useRef(null);
   const [coinsList, setCoinsList] = useState([]);
+  const [filteredCoins, setFilteredCoins] = useState(coinsList);
   const [loading, setIsLoading] = useState(false);
   useEffect(() => {
     setIsLoading(true);
@@ -20,11 +22,22 @@ function App() {
         .get("https://api.coinstats.app/public/v1/coins?skip=0")
         .then((response) => {
           setCoinsList(response.data.coins);
+          setFilteredCoins(response.data.coins);
           setIsLoading(false);
         });
     };
     fetchCoinsList();
   }, []);
+
+  const filterCoins = (coinName) => {
+    console.log("HMMMM");
+    const filteredCoins = coinsList.filter((coin, idx) => {
+      if (coin.name.toLowerCase().includes(coinName)) {
+        return coin;
+      }
+    });
+    setFilteredCoins(filteredCoins);
+  };
 
   if (loading) {
     return (
@@ -51,11 +64,12 @@ function App() {
           variant="filled"
           placeholder="Enter coin name to filter..."
           m={5}
-          onChange={console.log("Hello World!")}
+          ref={filterRef}
+          onChange={(e) => filterCoins(e.target.value)}
         />
       </Container>
 
-      <CoinList coinsList={coinsList} />
+      <CoinList coinsList={filteredCoins} />
     </>
   );
 }
